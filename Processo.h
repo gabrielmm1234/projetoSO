@@ -6,6 +6,7 @@
 
 extern int totalProcessos;
 
+//Estrutura de um processo.
 typedef struct processo
 {
 	int pID;

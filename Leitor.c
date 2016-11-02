@@ -1,8 +1,24 @@
+/*
+Universidade de Brasília
+Sistemas Operacionais
+
+Alunos: Gabriel Mesquita(130009121), Carlos Joel Tavares(), Leandro Bergmann()
+
+Trabalho Final de implementação da matéria de sistemas operacionais
+
+Módulo de leitura do arquivo processes.txt. É responsável por ler o arquivo e montar uma estrutura
+de processo definida no módulo de processo.
+*/
+
 #include "Leitor.h"
 #include "Processo.h"
 
 int totalProcessos;
 
+/*
+Função leProcessos que le o processes.txt e monta uma estrutura de processo para o dispatcher.
+return: Array de processos.
+*/
 processo* leProcessos(FILE* file){
 
 	char* pch;

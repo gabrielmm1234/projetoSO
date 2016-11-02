@@ -1,7 +1,21 @@
+/*
+Universidade de Brasília
+Sistemas Operacionais
+
+Alunos: Gabriel Mesquita(130009121), Carlos Joel Tavares(), Leandro Bergmann()
+
+Trabalho Final de implementação da matéria de sistemas operacionais
+
+Módulo responsável por todas as operações do processo bem como a definição da estrutura de um processo.
+*/
+
 #include "Processo.h"
 
 int totalProcessos;
 
+/*
+Função que recebe o array de processos montado a partir do arquivo e mostra na tela informações de cada processo.
+*/
 void exibidorDispatcher(processo* processo){
 	for(int j = 0; j < totalProcessos; j++){
 		printf("dispatcher => \n");
@@ -18,6 +32,9 @@ void exibidorDispatcher(processo* processo){
 	}
 }
 
+/*
+Função auxiliar utilizada para calcular e armazenar o ofsset na memória de cada processo.
+*/
 int calculaOffset(processo* processo, int j){
 	if(j == 0){
 		processo[j].offset = 0;
