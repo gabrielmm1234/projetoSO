@@ -19,8 +19,16 @@ void exibidorDispatcher(processo* processo){
 }
 
 int calculaOffset(processo* processo, int j){
-	if(j == 0)
+	if(j == 0){
+		processo[j].offset = 0;
 		return 0;
-	else
-		return processo[j -1].blocosEmMemoria + 1;
+	}
+	else if(j == 1){
+		processo[j].offset = processo[j - 1].blocosEmMemoria + 1;
+		return processo[j - 1].blocosEmMemoria + 1;
+	}
+	else{
+		processo[j].offset = processo[j - 1].offset + processo[j - 1].blocosEmMemoria + 1;
+		return processo[j - 1].offset + processo[j - 1].blocosEmMemoria + 1;
+	}
 }
