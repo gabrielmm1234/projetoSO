@@ -14,12 +14,18 @@ e inicia o dispatcher e execução do so.
 #include <stdlib.h>
 #include "Processo.h"
 #include "Leitor.h"
+#include "memoria.h"
 
 
 int main(int argc, char *argv[]){
 	processo* processo;
 
+	memoria = calloc(sizeof(int),1024);
+
 	FILE* file = fopen("processes.txt", "r");
 	processo = leProcessos(file);
 	exibidorDispatcher(processo);
+
+	alocaMemoria(processo);
+	dumpMem();
 }
