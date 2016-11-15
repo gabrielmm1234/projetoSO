@@ -23,5 +23,6 @@ typedef struct processo
 
 void exibidorDispatcher(processo* processo);
 int calculaOffset(processo* processo, int j);
+int ajustaOffset(processo* processo, int j);
 
 #endif

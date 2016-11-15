@@ -15,11 +15,17 @@ e inicia o dispatcher e execução do so.
 #include "Processo.h"
 #include "Leitor.h"
 #include "memoria.h"
+#include "Fila.h"
+
+processo* filaProcessoTempoReal;
+processo* filaProcessoUsuario;
 
 
 int main(int argc, char *argv[]){
 	processo* processo;
 
+	filaProcessoTempoReal = malloc(1000 * sizeof(processo));
+	filaProcessoUsuario = malloc(1000 * sizeof(processo));
 	memoria = calloc(sizeof(int),1024);
 
 	FILE* file = fopen("processes.txt", "r");
@@ -28,4 +34,7 @@ int main(int argc, char *argv[]){
 
 	alocaMemoria(processo);
 	dumpMem();
+
+	dumpFilaTempoReal();
+	dumpFilaUsuario();
 }

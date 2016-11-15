@@ -10,6 +10,7 @@ Módulo responsável por todas as operações sobre a memória bem como a defini
 */
 #include "memoria.h"
 
+//TODO -> refatorar para receber somente um processo em vez de percorrer tudo.
 //Função que percorre o array de processos e aloca espaço na memória dependendo do tipo do processo.
 void alocaMemoria(processo* processo){
 
@@ -40,8 +41,8 @@ void alocaMemoria(processo* processo){
 				ultimoBlocoTR = processo[j].blocosEmMemoria + processo[j].offset;
 				printf("Memória alocada para o processo de Tempo Real: %d\n",processo[j].pID);
 			}else{
-				//Se não foi alocado passa para o próximo processo -> TODO colocar na fila de processos.
 				printf("Memória ocupada, não foi possível alocar memória para o processo: %d\n",processo[j].pID);
+				insereProcessoNaFila(processo[j]);
 			}
 		}else{
 			if(ultimoBlocoUS != 1024){
@@ -65,8 +66,8 @@ void alocaMemoria(processo* processo){
 				ultimoBlocoUS = processo[j].blocosEmMemoria + processo[j].offset;
 				printf("Memória alocada para o processo de Usuário: %d\n",processo[j].pID);
 			}else{
-				//Se não foi alocado passa para o próximo processo -> TODO colocar na fila de processos.
 				printf("Memória ocupada, não foi possível alocar memória para o processo: %d\n",processo[j].pID);
+				insereProcessoNaFila(processo[j]);
 			}
 		}
 	}

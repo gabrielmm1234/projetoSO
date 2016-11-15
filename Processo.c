@@ -36,16 +36,19 @@ void exibidorDispatcher(processo* processo){
 Função auxiliar utilizada para calcular e armazenar o ofsset na memória de cada processo.
 */
 int calculaOffset(processo* processo, int j){
-	if(j == 0){
+	if(j == 0 || ajustaOffset(processo,j)){
 		processo[j].offset = 0;
 		return 0;
-	}
-	else if(j == 1){
-		processo[j].offset = processo[j - 1].blocosEmMemoria + 1;
-		return processo[j - 1].blocosEmMemoria + 1;
 	}
 	else{
 		processo[j].offset = processo[j - 1].offset + processo[j - 1].blocosEmMemoria + 1;
 		return processo[j - 1].offset + processo[j - 1].blocosEmMemoria + 1;
 	}
 }
+
+int ajustaOffset(processo* processo, int j){
+	if(processo[j].prioridadeDoProcesso == 0)
+		return processo[j].blocosEmMemoria > 64 - (processo[j - 1].offset + processo[j - 1].blocosEmMemoria);
+	else
+		return processo[j].blocosEmMemoria > 1024 - (processo[j - 1].offset + processo[j - 1].blocosEmMemoria);
+}	
