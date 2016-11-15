@@ -17,7 +17,7 @@ int static ultimoBlocoUS = 0;
 //Os blocos ocupados pelo processo são marcados na memória com seu PID.
 int* memoria;
 
-void alocaMemoria(processo* processo);
+void alocaMemoria(processo processo);
 void dumpMem();
 
 #endif

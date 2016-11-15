@@ -12,29 +12,56 @@ e inicia o dispatcher e execução do so.
 
 #include <stdio.h>
 #include <stdlib.h>
+#include "pthread.h"
 #include "Processo.h"
 #include "Leitor.h"
 #include "memoria.h"
 #include "Fila.h"
 
+#define N 1000
+
+int totalProcessos;
+
 processo* filaProcessoTempoReal;
 processo* filaProcessoUsuario;
 
+void* threadProcesso(void* arg){
+	processo* processo = arg; 
+    printf("Criou um pthread com id = %d \n",processo->pID);
+    //Tenta alocar memória.
+    alocaMemoria(*processo);
+    //execute();
+    pthread_exit(0);    
+}
+
 
 int main(int argc, char *argv[]){
+	pthread_t threads[N];
+
 	processo* processo;
 
+	//Aloca espaço para as estruturas de dados iniciais.
 	filaProcessoTempoReal = malloc(1000 * sizeof(processo));
 	filaProcessoUsuario = malloc(1000 * sizeof(processo));
 	memoria = calloc(sizeof(int),1024);
 
+	//Abre o arquivo e lê preenchendo o vetor de processos. Depois exibe as características de cada processo.
 	FILE* file = fopen("processes.txt", "r");
 	processo = leProcessos(file);
 	exibidorDispatcher(processo);
 
-	alocaMemoria(processo);
-	dumpMem();
+	//Cria uma thread para cada processo alocar sua memória e começar a executar.
+	for (int i = 0; i < totalProcessos ; i++) {
+        pthread_create(&threads[i], NULL, threadProcesso, &processo[i]);
+   	}
 
+   	//Espera o termino de todas as threads.
+   	for (int i = 0; i < totalProcessos ; i++) {
+      pthread_join(threads[i],NULL);
+  	}
+
+  	//Dumps dó estado da memória e das filas de espera.
+	dumpMem();
 	dumpFilaTempoReal();
 	dumpFilaUsuario();
 }
