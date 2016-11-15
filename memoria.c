@@ -28,6 +28,7 @@ void alocaMemoria(processo* processo){
 						memoria[processo[j].offset + i] = processo[j].pID;
 					}else{
 						printf("Memória ocupada, não foi possível alocar memória para o processo: %d\n",processo[j].pID);
+						insereProcessoNaFila(processo[j]);
 						flagAlocado = 1;
 						break;
 					}
@@ -53,6 +54,7 @@ void alocaMemoria(processo* processo){
 						memoria[processo[j].offset + i] = processo[j].pID;
 					}else{
 						printf("Memória ocupada, não foi possível alocar memória para o processo: %d\n",processo[j].pID);
+						insereProcessoNaFila(processo[j]);
 						flagAlocado = 1;
 						break;
 					}

@@ -30,12 +30,12 @@ processo retiraProcessoDaFilaDeTempoReal(){
 
 void dumpFilaTempoReal(){
 	for(int i = 0; i < tamanhoFilaTempoReal; i++){
-		printf("Processo %d\n",filaProcessoTempoReal[i].pID);
+		printf("Processo Tempo Real %d\n",filaProcessoTempoReal[i].pID);
 	}
 }
 
 void dumpFilaUsuario(){
 	for(int i = 0; i < tamanhoFilaUsuario; i++){
-		printf("Processo %d\n",filaProcessoUsuario[i].pID);
+		printf("Processo Usuário %d\n",filaProcessoUsuario[i].pID);
 	}
 }
