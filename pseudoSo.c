@@ -25,12 +25,13 @@ int totalProcessos;
 processo* filaProcessoTempoReal;
 processo* filaProcessoUsuario;
 
+//Thread que representa um processo lido do arquivo processes.txt
 void* threadProcesso(void* arg){
 	processo* processo = arg; 
     printf("Criou um pthread com id = %d \n",processo->pID);
     //Tenta alocar memória.
     alocaMemoria(*processo);
-    //execute();
+    //TODO -> execute();
     pthread_exit(0);    
 }
 
@@ -60,7 +61,7 @@ int main(int argc, char *argv[]){
       pthread_join(threads[i],NULL);
   	}
 
-  	//Dumps dó estado da memória e das filas de espera.
+  	//Dumps do estado da memória e das filas de espera -> DEBUG.
 	dumpMem();
 	dumpFilaTempoReal();
 	dumpFilaUsuario();
