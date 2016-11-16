@@ -14,6 +14,7 @@ Módulo responsável por todas as operações sobre a memória bem como a defini
 //Lock para acesso exclusivo a memória.
 pthread_mutex_t lock_memoria = PTHREAD_MUTEX_INITIALIZER;
 
+//TODO -> Refatorar essa alocação.
 //Função que aloca espaço na memória dependendo do tipo do processo recebido.
 void alocaMemoria(processo processo){
 	pthread_mutex_lock(&lock_memoria);
@@ -35,6 +36,7 @@ void alocaMemoria(processo processo){
 			//Atualiza qual o ultimo bloco alocado;
 			ultimoBlocoTR = processo.blocosEmMemoria + processo.offset;
 			printf("Memória alocada para o processo de Tempo Real: %d\n",processo.pID);
+			insereProcessoNaFila(processo);
 		}else{
 			printf("Memória ocupada, não foi possível alocar memória para o processo: %d\n",processo.pID);
 			insereProcessoNaFila(processo);
@@ -55,6 +57,7 @@ void alocaMemoria(processo processo){
 			//Atualiza qual o ultimo bloco alocado;
 			ultimoBlocoUS = processo.blocosEmMemoria + processo.offset;
 			printf("Memória alocada para o processo de Usuário: %d\n",processo.pID);
+			insereProcessoNaFila(processo);
 		}else{
 			printf("Memória ocupada, não foi possível alocar memória para o processo: %d\n",processo.pID);
 			insereProcessoNaFila(processo);

@@ -17,6 +17,7 @@ e inicia o dispatcher e execução do so.
 #include "Leitor.h"
 #include "memoria.h"
 #include "Fila.h"
+#include "Processador.h"
 
 #define N 1000
 
@@ -31,7 +32,7 @@ void* threadProcesso(void* arg){
     printf("Criou um pthread com id = %d \n",processo->pID);
     //Tenta alocar memória.
     alocaMemoria(*processo);
-    //TODO -> execute();
+    //Termina a thread.
     pthread_exit(0);    
 }
 
@@ -65,4 +66,8 @@ int main(int argc, char *argv[]){
 	dumpMem();
 	dumpFilaTempoReal();
 	dumpFilaUsuario();
+
+  	//Processador começa a executar
+  	//TODO -> adicionar o tempo de chegada de cada processo.
+  	execute();
 }

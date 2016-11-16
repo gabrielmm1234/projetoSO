@@ -28,6 +28,33 @@ processo retiraProcessoDaFilaDeTempoReal(){
 	return processo;
 }
 
+processo retiraProcessoDaFilaDeUsuario(){
+	processo processo = filaProcessoUsuario[topoFilaUsuario];
+	topoFilaUsuario++;
+	return processo;
+}
+
+int existeProcessoTempoRealPendente(){
+	if(tamanhoFilaTempoReal != topoFilaTempoReal)
+		return 1;
+	else
+		return 0;
+}
+
+int existeProcessoUsuarioPendente(){
+	if(tamanhoFilaUsuario != topoFilaUsuario)
+		return 1;
+	else
+		return 0;
+}
+
+int naoExisteProcessosPendentes(){
+	if(tamanhoFilaTempoReal == topoFilaTempoReal && tamanhoFilaUsuario == topoFilaUsuario)
+		return 1;
+	else
+		return 0;
+}
+
 void dumpFilaTempoReal(){
 	printf("--------- Fila tempo real ---------\n");
 	for(int i = 0; i < tamanhoFilaTempoReal; i++){
