@@ -12,6 +12,7 @@ e inicia o dispatcher e execução do so.
 
 #include <stdio.h>
 #include <stdlib.h>
+#include <unistd.h>
 #include "pthread.h"
 #include "Processo.h"
 #include "Leitor.h"
@@ -39,14 +40,16 @@ void* threadProcessador(void* arg){
 //Thread que representa um processo lido do arquivo processes.txt
 void* threadProcesso(void* arg){
 	processo* processo = arg; 
-    printf("Criou um pthread com id = %d \n",processo->pID);
+	//Simula o tempo de inicialização do processo.
+	sleep(processo->tempoDeInicializacao);
+
+    printf("Thread com id: %d chegou no instante %d\n", processo->pID, processo->tempoDeInicializacao);
     //Tenta alocar memória.
     alocaMemoria(*processo);
     pthread_mutex_lock(&processoMutex);
     //Variável de condição para travar os vários processos.	
   	pthread_cond_wait(&varCondicaoProcesso[processo->pID], &processoMutex);
   	pthread_mutex_unlock(&processoMutex);
-  	printf("Processo %d\n passou\n",processo->pID);
   	//Executa o processo.
   	executaProcesso(*processo);
     //Termina a thread.

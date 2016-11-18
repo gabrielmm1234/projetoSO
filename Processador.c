@@ -55,7 +55,7 @@ void escalonador(){
 
 void executaProcesso(processo processo){
 	pthread_mutex_lock(&lock_processador);
-	printf("Executando o processo: %d por %d ciclos\n", processo.pID, processo.tempoDeProcessador);
+	printf("Executando o processo: %d por %d ciclos\n\n", processo.pID, processo.tempoDeProcessador);
 	teste = 1;
 	pthread_cond_signal(&varCondicaoEscalonador);
 	pthread_mutex_unlock(&lock_processador);
