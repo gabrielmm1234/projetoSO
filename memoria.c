@@ -66,6 +66,11 @@ void alocaMemoria(processo processo){
 	pthread_mutex_unlock(&lock_memoria);
 }
 
+//Função que desaloca o espaço de memória assim que o processo termina a execução.
+void desalocaMemoria(processo processo){
+
+}
+
 //Função auxiliar para visualizar as alocaçoes na memória.
 void dumpMem(){
 	for(int i = 0; i < 1024; i++){

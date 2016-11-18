@@ -1,16 +1,27 @@
+/*
+Universidade de Brasília
+Sistemas Operacionais
+
+Alunos: Gabriel Mesquita(130009121), Carlos Joel Tavares(), Leandro Bergmann()
+
+Trabalho Final de implementação da matéria de sistemas operacionais
+
+Módulo responsável pelo escalonamento dos processos e simulação de execução no processador.
+*/
+
 #include "Processador.h"
 #include "pthread.h"
 
 int totalProcessos;
-int teste = 0;
+int execucaoProcessador = 0;
 
 //Lock para acesso exclusivo ao processador.
-pthread_mutex_t lock_escalonador = PTHREAD_MUTEX_INITIALIZER;
 pthread_mutex_t lock_processador = PTHREAD_MUTEX_INITIALIZER;
+pthread_mutex_t lock_escalonador = PTHREAD_MUTEX_INITIALIZER;
 
-//TODO -> adicionar o tempo de chegada de cada processo.
 //TODO -> adicionar as prioridades para processo de usuário.
-void escalonador(){
+//Função responsável por escalonar os processos para execução no processador.
+void escalonar(){
 	int processosExecutados = 0;
 	//Loop infinito de execução do processador.
 	while(1){
@@ -22,12 +33,12 @@ void escalonador(){
 			pthread_cond_signal(&varCondicaoProcesso[processo.pID]);
 
 			pthread_mutex_lock(&lock_escalonador);
-			while(!teste)
+			while(!execucaoProcessador)
 				//Espera sinal para voltar a escalonar
 				pthread_cond_wait(&varCondicaoEscalonador, &lock_escalonador);
 			pthread_mutex_unlock(&lock_escalonador);
 			printf("Escalonador liberado\n\n");
-			teste = 0;
+			execucaoProcessador = 0;
 			processosExecutados++;
 			continue;
 		}
@@ -38,12 +49,12 @@ void escalonador(){
 			pthread_cond_signal(&varCondicaoProcesso[processo.pID]);
 
 			pthread_mutex_lock(&lock_escalonador);
-			while(!teste)
+			while(!execucaoProcessador)
 				//Espera sinal para voltar a escalonar
 				pthread_cond_wait(&varCondicaoEscalonador, &lock_escalonador);
 			pthread_mutex_unlock(&lock_escalonador);
 			printf("Escalonador liberado\n\n");
-			teste = 0;
+			execucaoProcessador = 0;
 			processosExecutados++;
 		}
 		if(processosExecutados == totalProcessos){
@@ -53,10 +64,11 @@ void escalonador(){
 	}
 }
 
+//Função que simula a execução de um processo no processador.
 void executaProcesso(processo processo){
 	pthread_mutex_lock(&lock_processador);
 	printf("Executando o processo: %d por %d ciclos\n\n", processo.pID, processo.tempoDeProcessador);
-	teste = 1;
+	execucaoProcessador = 1;
 	pthread_cond_signal(&varCondicaoEscalonador);
 	pthread_mutex_unlock(&lock_processador);
 }

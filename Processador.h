@@ -10,7 +10,7 @@
 pthread_cond_t varCondicaoProcesso[N];
 pthread_cond_t varCondicaoEscalonador;
 
-void escalonador();
+void escalonar();
 void executaProcesso(processo processo);
 
 #endif

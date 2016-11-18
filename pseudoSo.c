@@ -25,13 +25,13 @@ int totalProcessos;
 processo* filaProcessoTempoReal;
 processo* filaProcessoUsuario;
 
+//Lock para a variável de condição dos processos.
 pthread_mutex_t processoMutex = PTHREAD_MUTEX_INITIALIZER;
 
 //Thread que representa a execução do processador
 void* threadProcessador(void* arg){
 	//Processador começa a executar
-  	//TODO -> adicionar o tempo de chegada de cada processo.
-  	escalonador();
+  	escalonar();
 
   	//Termina a thread.
     pthread_exit(0);
@@ -40,18 +40,23 @@ void* threadProcessador(void* arg){
 //Thread que representa um processo lido do arquivo processes.txt
 void* threadProcesso(void* arg){
 	processo* processo = arg; 
+
 	//Simula o tempo de inicialização do processo.
 	sleep(processo->tempoDeInicializacao);
 
     printf("Thread com id: %d chegou no instante %d\n", processo->pID, processo->tempoDeInicializacao);
+
     //Tenta alocar memória.
     alocaMemoria(*processo);
+
     pthread_mutex_lock(&processoMutex);
-    //Variável de condição para travar os vários processos.	
+    //Variável de condição para travar os vários processos. Ficam esperando liberação do escalonador.	
   	pthread_cond_wait(&varCondicaoProcesso[processo->pID], &processoMutex);
   	pthread_mutex_unlock(&processoMutex);
+
   	//Executa o processo.
   	executaProcesso(*processo);
+
     //Termina a thread.
     pthread_exit(0);    
 }
@@ -68,6 +73,7 @@ int main(int argc, char *argv[]){
 	filaProcessoUsuario = malloc(N * sizeof(processo));
 	memoria = calloc(sizeof(int),1024);
 
+	//Inicia as variáveis de condição.
 	for(int i = 0; i < N; i++)
 		pthread_cond_init (&varCondicaoProcesso[i], NULL);
 	pthread_cond_init (&varCondicaoEscalonador, NULL);
@@ -82,6 +88,7 @@ int main(int argc, char *argv[]){
         pthread_create(&threads[i], NULL, threadProcesso, &processo[i]);
    	}
 
+   	//Cria a thread de execução do processador.
    	pthread_create(&processador, NULL, threadProcessador, NULL);
 
    	//Espera o termino de todas as threads.
