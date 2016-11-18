@@ -2,7 +2,15 @@
 #define PROCESSADOR_H
 
 #include "Fila.h"
+#include "pthread.h"
+#include "Processo.h"
 
-void execute();
+#define N 1000
+
+pthread_cond_t varCondicaoProcesso[N];
+pthread_cond_t varCondicaoEscalonador;
+
+void escalonador();
+void executaProcesso(processo processo);
 
 #endif
