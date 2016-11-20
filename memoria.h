@@ -18,6 +18,7 @@ int static ultimoBlocoUS = 0;
 int* memoria;
 
 void alocaMemoria(processo processo);
+void desalocaMemoria(processo processo);
 void dumpMem();
 
 #endif
