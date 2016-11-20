@@ -68,7 +68,15 @@ void alocaMemoria(processo processo){
 
 //Função que desaloca o espaço de memória assim que o processo termina a execução.
 void desalocaMemoria(processo processo){
-
+	//preencho a quantidade de blocos na memoria com o pid
+	for(int i = 0; i < processo.blocosEmMemoria; i++){
+		//Se está livre o espaço coloca o pid
+		if(memoria[processo.offset + i] == processo.pID){
+			memoria[processo.offset + i] = 0;
+		}
+	}
+	ultimoBlocoTR = 0;
+	printf("Memória desalocada para o processo: %d\n\n",processo.pID);
 }
 
 //Função auxiliar para visualizar as alocaçoes na memória.

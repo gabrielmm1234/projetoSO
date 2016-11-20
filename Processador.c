@@ -64,11 +64,22 @@ void escalonar(){
 	}
 }
 
+//TODO -> Refatorar para quando houver preempção para processos de usuário.
 //Função que simula a execução de um processo no processador.
 void executaProcesso(processo processo){
 	pthread_mutex_lock(&lock_processador);
-	printf("Executando o processo: %d por %d ciclos\n\n", processo.pID, processo.tempoDeProcessador);
+
+	//Simulação da execução.
+	printf("process %d =>\n",processo.pID);
+	printf("p%d STARTED\n",processo.pID);
+	for(int i = 0; i < processo.tempoDeProcessador; i++){
+		printf("p%d instruction %d\n",processo.pID,i + 1);
+	}
+	printf("p%d return SIGINT\n",processo.pID);
+
 	execucaoProcessador = 1;
+	desalocaMemoria(processo);
+
 	pthread_cond_signal(&varCondicaoEscalonador);
 	pthread_mutex_unlock(&lock_processador);
 }

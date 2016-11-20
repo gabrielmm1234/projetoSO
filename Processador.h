@@ -4,6 +4,7 @@
 #include "Fila.h"
 #include "pthread.h"
 #include "Processo.h"
+#include "memoria.h"
 
 #define N 1000
 

@@ -41,7 +41,7 @@ void* threadProcessador(void* arg){
 void* threadProcesso(void* arg){
 	processo* processo = arg; 
 
-	//Simula o tempo de inicialização do processo.
+	//TODO -> Refatorar -> Simula o tempo de inicialização do processo.
 	sleep(processo->tempoDeInicializacao);
 
     printf("Thread com id: %d chegou no instante %d\n", processo->pID, processo->tempoDeInicializacao);
