@@ -1,7 +1,7 @@
 all: pseudoSo clean
 
-pseudoSo: Leitor.o Fila.o Processador.o Processo.o Memoria.o
-	gcc pseudoSo.c Leitor.o Fila.o Processador.o Processo.o Memoria.o -std=c99 -pthread -o pseudoSo
+pseudoSo: Leitor.o Fila.o Processador.o Processo.o Memoria.o Recurso.o
+	gcc pseudoSo.c Leitor.o Fila.o Processador.o Processo.o Memoria.o Recurso.o -std=c99 -pthread -o pseudoSo
 
 Leitor.o: Leitor.c Leitor.h 
 	gcc Leitor.c -std=c99 -c -pthread 
@@ -17,6 +17,9 @@ Processo.o: Processo.c Processo.h
 
 Memoria.o: Memoria.c Memoria.h
 	gcc Memoria.c -std=c99 -c -pthread
+
+Recurso.o: Recurso.c Recurso.h
+	gcc Recurso.c -std=c99 -c -pthread
 
 clean:
 	rm -f *.o 

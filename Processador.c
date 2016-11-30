@@ -1,4 +1,4 @@
-/*xxx
+/*
 Universidade de Brasília
 Sistemas Operacionais
 

@@ -43,6 +43,32 @@ void exclui(Fila *fila){
     fila->tamanho--;
 }
 
+void excluiEm(Fila *fila, int id){
+    Nodo *auxiliar;
+    Nodo *atual = fila->principal;
+    Nodo *anterior = NULL;
+
+    if(atual == NULL){
+        return;
+    }
+
+    while(1){
+        printf("0\n");
+        printf("%p\n", atual);
+        if(atual->processo->pID == id){
+            printf("1\n");
+            auxiliar = atual->proximo;
+            free(atual);
+            anterior->proximo = auxiliar;
+            fila->tamanho--;
+        } else{
+            printf("2\n");
+            anterior = atual;
+            atual = atual->proximo;
+        }
+    }
+}
+
 Nodo* frente(Fila *fila){
     return fila->principal;
 }

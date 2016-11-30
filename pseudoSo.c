@@ -19,6 +19,7 @@ e inicia o dispatcher e execução do so.
 #include "Memoria.h"
 #include "Fila.h"
 #include "Processador.h"
+#include "Recurso.h"
 
 int totalProcessos;
 
@@ -26,6 +27,7 @@ Fila *filaProcessoTempoReal;
 Fila *filaProcessoUsuario;
 Fila *filaProcessoUsuario2;
 Fila *filaProcessoUsuario3;
+processo* processos;
 
 //Lock para a variável de condição dos processos.
 pthread_mutex_t processoMutex = PTHREAD_MUTEX_INITIALIZER;
@@ -52,6 +54,7 @@ void* threadProcesso(void* arg){
     alocaMemoria(processo);
 
   	//Executa o processo.
+  	alocaRecursos(processo);
   	while(processo->instrucao != processo->tempoDeProcessador){
 	    //Variável de condição para travar os vários processos. Ficam esperando liberação do escalonador.	
 	    pthread_mutex_lock(&processoMutex);
@@ -60,6 +63,7 @@ void* threadProcesso(void* arg){
 	  	
 	  	processo = executaProcesso(processo);
   	}
+  	liberaRecursos(processo);
 
     //Termina a thread.
     pthread_exit(0);    
@@ -70,8 +74,6 @@ int main(int argc, char *argv[]){
 	pthread_t threads[N];
 	pthread_t processador;
 	int i;
-
-	processo* processos;
 
 	//Aloca espaço para as estruturas de dados iniciais.
 	filaProcessoTempoReal = initFila();

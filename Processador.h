@@ -10,6 +10,7 @@
 
 pthread_cond_t varCondicaoProcesso[N];
 pthread_cond_t varCondicaoEscalonador;
+extern processo* processos;
 
 void escalonar();
 processo* executaProcesso(processo *processo);

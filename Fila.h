@@ -27,5 +27,6 @@ void exclui(Fila *fila);
 Nodo* frente(Fila *fila);
 Fila* initFila();
 int isEmpty(Fila *fila);
+void excluiEm(Fila *fila, int id);
 
 #endif
