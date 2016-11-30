@@ -14,7 +14,7 @@ Módulo responsável pelo escalonamento dos processos e simulação de execuçã
 
 int totalProcessos;
 int execucaoProcessador = 0;
-static int quantum = 2;
+static int quantum = 1;
 int tempo = 0;
 
 //Lock para acesso exclusivo ao processador.
@@ -30,6 +30,7 @@ void escalonar(){
 		//Se ainda existem processos na fila de prontos de tempo real executa primeiro.	
 		if(isEmpty(filaProcessoTempoReal)){
 			processo *processo = frente(filaProcessoTempoReal)->processo;
+			processo->vezesEmProcessador++;
 			printf("Liberando o processo %d\n",processo->pID);
 			//Sinaliza thread para ser executada.
 			pthread_cond_signal(&varCondicaoProcesso[processo->pID]);
@@ -52,6 +53,7 @@ void escalonar(){
 			execucaoProcessador = 0;
 		} else if(isEmpty(filaProcessoUsuario)){
 			processo *processo = frente(filaProcessoUsuario)->processo;
+			processo->vezesEmProcessador++;
 			printf("Liberando o processo %d\n",processo->pID);
 			//Sinaliza thread para ser executada.
 			pthread_cond_signal(&varCondicaoProcesso[processo->pID]);
@@ -68,12 +70,19 @@ void escalonar(){
 				processosExecutados++;
 				exclui(filaProcessoUsuario);
 			} else{
-				insere(filaProcessoUsuario, processo);
-				exclui(filaProcessoUsuario);
+				if(processo->vezesEmProcessador > 10){
+					processo->vezesEmProcessador = 0;
+					insere(filaProcessoUsuario2, processo);
+					exclui(filaProcessoUsuario);
+				} else{
+					insere(filaProcessoUsuario, processo);
+					exclui(filaProcessoUsuario);
+				}
 			}
 			
 		} else if(isEmpty(filaProcessoUsuario2)){
 			processo *processo = frente(filaProcessoUsuario2)->processo;
+			processo->vezesEmProcessador++;
 			printf("Liberando o processo %d\n",processo->pID);
 			//Sinaliza thread para ser executada.
 			pthread_cond_signal(&varCondicaoProcesso[processo->pID]);
@@ -90,8 +99,14 @@ void escalonar(){
 				processosExecutados++;
 				exclui(filaProcessoUsuario2);
 			} else{
-				insere(filaProcessoUsuario2, processo);
-				exclui(filaProcessoUsuario2);
+				if(processo->vezesEmProcessador > 10){
+					processo->vezesEmProcessador = 0;
+					insere(filaProcessoUsuario3, processo);
+					exclui(filaProcessoUsuario2);
+				} else{
+					insere(filaProcessoUsuario2, processo);
+					exclui(filaProcessoUsuario2);
+				}
 			}
 		} else if(isEmpty(filaProcessoUsuario3)){
 			processo *processo = frente(filaProcessoUsuario3)->processo;

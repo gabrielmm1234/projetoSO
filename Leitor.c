@@ -54,6 +54,7 @@ processo* leProcessos(FILE* file){
 		}
 		i = 0;
 		processo[j].instrucao = 0;
+		processo[j].vezesEmProcessador = 0;
 		j++;
 		totalProcessos++;
 		if(totalProcessos >= 1000){

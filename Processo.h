@@ -20,6 +20,7 @@ typedef struct processo
 	int utilizacaoDoModem;
 	int numeroCodigoDriver;
 	int instrucao;
+	int vezesEmProcessador;
 } processo; 
 
 void exibidorDispatcher(processo* processo);
