@@ -29,6 +29,13 @@ Fila *filaProcessoUsuario2;
 Fila *filaProcessoUsuario3;
 processo* processos;
 
+int compare(const void *s1, const void *s2)
+{
+  processo *p1 = (processo *)s1;
+  processo *p2 = (processo *)s2;
+  return p1->tempoDeInicializacao >= p2->tempoDeInicializacao;
+}
+
 //Lock para a variável de condição dos processos.
 pthread_mutex_t processoMutex = PTHREAD_MUTEX_INITIALIZER;
 
@@ -90,6 +97,7 @@ int main(int argc, char *argv[]){
 	//Abre o arquivo e lê preenchendo o vetor de processos. Depois exibe as características de cada processo.
 	FILE* file = fopen("processes.txt", "r");
 	processos = leProcessos(file);
+	qsort(processos, totalProcessos, sizeof(processo), compare);
 	exibidorDispatcher(processos);
 
 	//Cria uma thread para cada processo alocar sua memória e começar a executar.
