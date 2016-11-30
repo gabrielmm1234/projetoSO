@@ -55,10 +55,12 @@ processo* leProcessos(FILE* file){
 		i = 0;
 		processo[j].instrucao = 0;
 		processo[j].vezesEmProcessador = 0;
+		processo[j].pronto = 0;
 		j++;
 		totalProcessos++;
 		if(totalProcessos >= 1000){
 			printf("OS processos atingiram seu limite maximo. Caso existam mais processos eles seram ignorados\n");
+			fclose(file);
 			return processo;
 		}
 	}

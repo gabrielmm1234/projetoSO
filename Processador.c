@@ -20,6 +20,7 @@ int tempo = 0;
 //Lock para acesso exclusivo ao processador.
 pthread_mutex_t lock_processador = PTHREAD_MUTEX_INITIALIZER;
 pthread_mutex_t lock_escalonador = PTHREAD_MUTEX_INITIALIZER;
+extern pthread_mutex_t processoMutex;
 
 //TODO -> adicionar as prioridades para processo de usuário.
 //Função responsável por escalonar os processos para execução no processador.
@@ -31,22 +32,24 @@ void escalonar(){
 		if(isEmpty(filaProcessoTempoReal)){
 			processo *processo = frente(filaProcessoTempoReal)->processo;
 			processo->vezesEmProcessador++;
-			printf("Liberando o processo %d\n",processo->pID);
 			//Sinaliza thread para ser executada.
-			pthread_cond_signal(&varCondicaoProcesso[processo->pID]);
+			pthread_mutex_lock(&processoMutex);
+			if(processo->pronto){
+				pthread_cond_signal(&varCondicaoProcesso[processo->pID]);
+			} else{
+				pthread_mutex_unlock(&processoMutex);
+				continue;
+			}
+			pthread_mutex_unlock(&processoMutex);
 
 			pthread_mutex_lock(&lock_escalonador);
 			while(!execucaoProcessador)
 				//Espera sinal para voltar a escalonar
 				pthread_cond_wait(&varCondicaoEscalonador, &lock_escalonador);
 			pthread_mutex_unlock(&lock_escalonador);
-			printf("Escalonador liberado\n\n");
 
 			if(processo->instrucao == processo->tempoDeProcessador){
 				processosExecutados++;
-				exclui(filaProcessoTempoReal);
-			} else{
-				insere(filaProcessoTempoReal, processo);
 				exclui(filaProcessoTempoReal);
 			}
 
@@ -56,7 +59,14 @@ void escalonar(){
 			processo->vezesEmProcessador++;
 			printf("Liberando o processo %d\n",processo->pID);
 			//Sinaliza thread para ser executada.
-			pthread_cond_signal(&varCondicaoProcesso[processo->pID]);
+			pthread_mutex_lock(&processoMutex);
+			if(processo->pronto){
+				pthread_cond_signal(&varCondicaoProcesso[processo->pID]);
+			} else{
+				pthread_mutex_unlock(&processoMutex);
+				continue;
+			}
+			pthread_mutex_unlock(&processoMutex);
 
 			pthread_mutex_lock(&lock_escalonador);
 			while(!execucaoProcessador)
@@ -85,7 +95,14 @@ void escalonar(){
 			processo->vezesEmProcessador++;
 			printf("Liberando o processo %d\n",processo->pID);
 			//Sinaliza thread para ser executada.
-			pthread_cond_signal(&varCondicaoProcesso[processo->pID]);
+			pthread_mutex_lock(&processoMutex);
+			if(processo->pronto){
+				pthread_cond_signal(&varCondicaoProcesso[processo->pID]);
+			} else{
+				pthread_mutex_unlock(&processoMutex);
+				continue;
+			}
+			pthread_mutex_unlock(&processoMutex);
 
 			pthread_mutex_lock(&lock_escalonador);
 			while(!execucaoProcessador)
@@ -112,7 +129,14 @@ void escalonar(){
 			processo *processo = frente(filaProcessoUsuario3)->processo;
 			printf("Liberando o processo %d\n",processo->pID);
 			//Sinaliza thread para ser executada.
-			pthread_cond_signal(&varCondicaoProcesso[processo->pID]);
+			pthread_mutex_lock(&processoMutex);
+			if(processo->pronto){
+				pthread_cond_signal(&varCondicaoProcesso[processo->pID]);
+			} else{
+				pthread_mutex_unlock(&processoMutex);
+				continue;
+			}
+			pthread_mutex_unlock(&processoMutex);
 
 			pthread_mutex_lock(&lock_escalonador);
 			while(!execucaoProcessador)
@@ -143,8 +167,14 @@ processo* executaProcesso(processo *processo){
 	pthread_mutex_lock(&lock_processador);
 
 	//Simulação da execução.
-	printf("process %d =>\n",processo->pID);
-	printf("p%d STARTED\n",processo->pID);
+	if(processo->instrucao == 0 && processo->prioridadeDoProcesso == 0){
+		printf("process %d =>\n",processo->pID);
+		printf("p%d STARTED\n",processo->pID);
+	} else if(processo->prioridadeDoProcesso != 0){
+		printf("process %d =>\n",processo->pID);
+		printf("p%d STARTED\n",processo->pID);
+	}
+
 	while(1){
 		printf("p%d instruction %d\n",processo->pID,processo->instrucao + 1);
 		processo->instrucao++;

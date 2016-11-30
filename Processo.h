@@ -21,6 +21,7 @@ typedef struct processo
 	int numeroCodigoDriver;
 	int instrucao;
 	int vezesEmProcessador;
+	int pronto;
 } processo; 
 
 void exibidorDispatcher(processo* processo);

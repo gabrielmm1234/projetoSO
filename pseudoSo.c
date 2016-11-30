@@ -65,9 +65,9 @@ void* threadProcesso(void* arg){
   	while(processo->instrucao != processo->tempoDeProcessador){
 	    //Variável de condição para travar os vários processos. Ficam esperando liberação do escalonador.	
 	    pthread_mutex_lock(&processoMutex);
+	    processo->pronto = 1;
 	  	pthread_cond_wait(&varCondicaoProcesso[processo->pID], &processoMutex);
 	  	pthread_mutex_unlock(&processoMutex);
-	  	
 	  	processo = executaProcesso(processo);
   	}
   	liberaRecursos(processo);
