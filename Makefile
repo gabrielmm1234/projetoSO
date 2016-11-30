@@ -1,56 +1,22 @@
-CASM = nasm
-CCPP = g++
-CC   = gcc
-CFLAGS   = -Wextra -g -m32 -std=c99
-NFLAGS   = 
-INCLUDE  = 
-OBJDIR	 = objetos
-TARGET   = pseudoSo.exe
-SOURCES_ASM = $(wildcard *.asm)
-SOURCES_C   = $(wildcard *.c)
-SOURCES_CPP = $(wildcard *.cpp)
-OBJECTS_ASM = $(SOURCES_ASM:.asm=.obj)
-OBJECTS_C   = $(SOURCES_C:.c=.obj)
-OBJECTS_CPP = $(SOURCES_CPP:.cpp=.obj)
-OBJECTS  = $(OBJECTS_ASM) $(OBJECTS_CPP) $(OBJECTS_C)
-DEPENDS  = $(OBJECTS_C:.obj=.d) $(OBJECTS_CPP:.obj=.d) $(OBJECTS_ASM:.obj=.d)
+all: pseudoSo clean
 
-ifeq ($(OS),Windows_NT)
-    REMOVE = rm
-    NFLAGS += -fwin32 --PREFIX _
-	UNAME_S := $(shell uname -s)
-	ifeq ($(UNAME_S),MINGW32_NT-6.3)
-		REMOVE = rm
-	endif
-else
-    REMOVE = rm -f
-    UNAME_S := $(shell uname -s)
-    ifeq ($(UNAME_S),Linux)
-        NFLAGS += -felf32 
-    endif
-    ifeq ($(UNAME_S),Darwin)
-        NFLAGS += -fmacho32 --PREFIX _
-    endif
-    
-endif
+pseudoSo: Leitor.o Fila.o Processador.o Processo.o Memoria.o
+	gcc pseudoSo.c Leitor.o Fila.o Processador.o Processo.o Memoria.o -std=c99 -pthread -o pseudoSo
 
-$(TARGET): $(OBJECTS)
-	$(CC) -m32 -o $@ $^ -lm
+Leitor.o: Leitor.c Leitor.h 
+	gcc Leitor.c -std=c99 -c -pthread 
 
-%.obj: %.c
-	$(CC) $(CFLAGS) $(INCLUDE) -o $@ -c $< 
-	
-%.obj: %.cpp
-	$(CCPP) $(CFLAGS) $(INCLUDE) -o $@ -c $<
+Fila.o: Fila.c Fila.h
+	gcc Fila.c -std=c99 -c -pthread
 
-%.obj: %.asm
-	$(CASM) $(NFLAGS) -o $@ $<
+Processador.o: Processador.c Processador.h
+	gcc Processador.c -std=c99 -c -pthread
 
+Processo.o: Processo.c Processo.h
+	gcc Processo.c -std=c99 -c -pthread
 
-all: clean $(TARGET)
+Memoria.o: Memoria.c Memoria.h
+	gcc Memoria.c -std=c99 -c -pthread
 
 clean:
-	$(REMOVE) $(OBJECTS) $(TARGET)
-	
-test:
-	echo $(OBJECTS)
+	rm -f *.o 

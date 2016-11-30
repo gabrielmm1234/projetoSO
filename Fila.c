@@ -2,71 +2,63 @@
 Universidade de Brasília
 Sistemas Operacionais
 
-Alunos: Gabriel Mesquita(130009121), Carlos Joel Tavares(), Leandro Bergmann()
+Alunos: Gabriel Mesquita(130009121), Carlos Joel Tavares(130007293), Leandro Bergmann()
 
-Trabalho Final de implementação da matéria de sistemas operacionais
+Trabalho Final de implementação da matéria 	de sistemas operacionais
 
 Módulo responsável por todas as operações sobre a fila de processos.
 */
 
 #include "Fila.h"
 
-void insereProcessoNaFila(processo processo){
-	if(processo.prioridadeDoProcesso == 0){
-		filaProcessoTempoReal[tamanhoFilaTempoReal] = processo;
-		tamanhoFilaTempoReal++;
+Fila* initFila(){
+	Fila* fila = (Fila*) malloc(sizeof(Fila));
+	fila->principal = NULL;
+	fila->final = NULL;
+	fila->tamanho = 0;
+
+	return fila;
+}
+
+void insere(Fila *fila, processo *processo){
+    Nodo *atual = (Nodo*) malloc(sizeof(Nodo));
+    atual->processo = processo;
+    atual->proximo = NULL;
+  
+    if(fila->principal == NULL){
+        fila->principal = fila->final = atual;
+    } else{
+        fila->final->proximo = atual;
+        fila->final = atual;
+    }
+    fila->tamanho++;
+}
+
+void exclui(Fila *fila){
+    Nodo *auxiliar;
+
+    auxiliar = fila->principal->proximo;
+    free(fila->principal);
+    fila->principal = auxiliar;
+    fila->tamanho--;
+}
+
+Nodo* frente(Fila *fila){
+    return fila->principal;
+}
+
+int isEmpty(Fila *fila){
+	return fila->tamanho;
+}
+
+void insereProcessoNaFila(processo *processo){
+	if(processo->prioridadeDoProcesso == 0){
+		insere(filaProcessoTempoReal, processo);
+	} else if(processo->prioridadeDoProcesso == 1){
+		insere(filaProcessoUsuario, processo);
+	} else if(processo->prioridadeDoProcesso == 2){
+		insere(filaProcessoUsuario2, processo);
+	} else if(processo->prioridadeDoProcesso == 3){
+		insere(filaProcessoUsuario3, processo);
 	}
-	else{
-		filaProcessoUsuario[tamanhoFilaUsuario] = processo;
-		tamanhoFilaUsuario++;
-	}
-}
-
-processo retiraProcessoDaFilaDeTempoReal(){
-	processo processo = filaProcessoTempoReal[topoFilaTempoReal];
-	topoFilaTempoReal++;
-	return processo;
-}
-
-processo retiraProcessoDaFilaDeUsuario(){
-	processo processo = filaProcessoUsuario[topoFilaUsuario];
-	topoFilaUsuario++;
-	return processo;
-}
-
-int existeProcessoTempoRealPendente(){
-	if(tamanhoFilaTempoReal != topoFilaTempoReal)
-		return 1;
-	else
-		return 0;
-}
-
-int existeProcessoUsuarioPendente(){
-	if(tamanhoFilaUsuario != topoFilaUsuario)
-		return 1;
-	else
-		return 0;
-}
-
-int naoExisteProcessosPendentes(){
-	if(tamanhoFilaTempoReal == topoFilaTempoReal && tamanhoFilaUsuario == topoFilaUsuario)
-		return 1;
-	else
-		return 0;
-}
-
-void dumpFilaTempoReal(){
-	printf("--------- Fila tempo real ---------\n");
-	for(int i = 0; i < tamanhoFilaTempoReal; i++){
-		printf("Processo Tempo Real %d\n",filaProcessoTempoReal[i].pID);
-	}
-	printf("--------- Fila tempo real ---------\n\n");
-}
-
-void dumpFilaUsuario(){
-	printf("--------- Fila Usuário ---------\n");
-	for(int i = 0; i < tamanhoFilaUsuario; i++){
-		printf("Processo Usuário %d\n",filaProcessoUsuario[i].pID);
-	}
-	printf("--------- Fila Usuário ---------\n\n");
 }

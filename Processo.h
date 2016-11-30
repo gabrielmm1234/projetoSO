@@ -19,7 +19,8 @@ typedef struct processo
 	int utilizacaoDoScanner;
 	int utilizacaoDoModem;
 	int numeroCodigoDriver;
-}processo; 
+	int instrucao;
+} processo; 
 
 void exibidorDispatcher(processo* processo);
 int calculaOffset(processo* processo, int j);

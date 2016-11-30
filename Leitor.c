@@ -2,7 +2,7 @@
 Universidade de Brasília
 Sistemas Operacionais
 
-Alunos: Gabriel Mesquita(130009121), Carlos Joel Tavares(), Leandro Bergmann()
+Alunos: Gabriel Mesquita(130009121), Carlos Joel Tavares(130007293), Leandro Bergmann()
 
 Trabalho Final de implementação da matéria de sistemas operacionais
 
@@ -20,7 +20,6 @@ Função leProcessos que le o processes.txt e monta uma estrutura de processo pa
 return: Array de processos.
 */
 processo* leProcessos(FILE* file){
-
 	char* pch;
 	char* line = NULL;
 	size_t len = 0;
@@ -54,8 +53,13 @@ processo* leProcessos(FILE* file){
 			pch = strtok(NULL,", ");
 		}
 		i = 0;
+		processo[j].instrucao = 0;
 		j++;
 		totalProcessos++;
+		if(totalProcessos >= 1000){
+			printf("OS processos atingiram seu limite maximo. Caso existam mais processos eles seram ignorados\n");
+			return processo;
+		}
 	}
 
 	fclose(file);

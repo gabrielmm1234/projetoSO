@@ -5,22 +5,27 @@
 #include <stdlib.h>
 #include "Processo.h"
 
-int static tamanhoFilaTempoReal = 0;
-int static topoFilaTempoReal = 0;
-extern processo* filaProcessoTempoReal;
+typedef struct Nodo {
+    processo *processo;
+    struct Nodo *proximo;
+} Nodo;
 
-//TODO -> melhorar a fila de processos de usuário para as 3 filas de prioridades.
-int static tamanhoFilaUsuario = 0;
-int static topoFilaUsuario = 0;
-extern processo* filaProcessoUsuario;
+typedef struct Fila {
+	Nodo* principal;
+	Nodo* final;
+	int tamanho;
+} Fila;
 
-void insereProcessoNaFila(processo processo);
-void dumpFilaTempoReal();
-void dumpFilaUsuario();
-processo retiraProcessoDaFilaDeTempoReal();
-processo retiraProcessoDaFilaDeUsuario();
-int existeProcessoTempoRealPendente();
-int naoExisteProcessosPendentes();
-int existeProcessoUsuarioPendente();
+extern Fila *filaProcessoTempoReal;
+extern Fila *filaProcessoUsuario;
+extern Fila *filaProcessoUsuario2;
+extern Fila *filaProcessoUsuario3;
+
+void insereProcessoNaFila(processo *processo);
+void insere(Fila *fila, processo *processo);
+void exclui(Fila *fila);
+Nodo* frente(Fila *fila);
+Fila* initFila();
+int isEmpty(Fila *fila);
 
 #endif

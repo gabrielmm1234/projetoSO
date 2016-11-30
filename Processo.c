@@ -2,7 +2,7 @@
 Universidade de Brasília
 Sistemas Operacionais
 
-Alunos: Gabriel Mesquita(130009121), Carlos Joel Tavares(), Leandro Bergmann()
+Alunos: Gabriel Mesquita(130009121), Carlos Joel Tavares(130007293), Leandro Bergmann()
 
 Trabalho Final de implementação da matéria de sistemas operacionais
 

@@ -4,7 +4,7 @@
 #include "Fila.h"
 #include "pthread.h"
 #include "Processo.h"
-#include "memoria.h"
+#include "Memoria.h"
 
 #define N 1000
 
@@ -12,6 +12,6 @@ pthread_cond_t varCondicaoProcesso[N];
 pthread_cond_t varCondicaoEscalonador;
 
 void escalonar();
-void executaProcesso(processo processo);
+processo* executaProcesso(processo *processo);
 
 #endif
